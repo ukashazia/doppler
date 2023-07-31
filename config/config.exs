@@ -13,9 +13,12 @@ config :doppler,
 # Configures the endpoint
 config :doppler, DopplerWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: DopplerWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    formats: [html: DopplerWeb.ErrorHTML, json: DopplerWeb.ErrorJSON],
+    layout: false
+  ],
   pubsub_server: Doppler.PubSub,
-  live_view: [signing_salt: "lIYsZ4MR"]
+  live_view: [signing_salt: "vTbMrTrY"]
 
 # Configures the mailer
 #
@@ -26,17 +29,26 @@ config :doppler, DopplerWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :doppler, Doppler.Mailer, adapter: Swoosh.Adapters.Local
 
-# Swoosh API client is needed for adapters other than SMTP.
-config :swoosh, :api_client, false
-
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.12.18",
+  version: "0.17.11",
   default: [
     args:
-      ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "3.3.2",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
   ]
 
 # Configures Elixir's Logger

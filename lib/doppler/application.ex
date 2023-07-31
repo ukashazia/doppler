@@ -8,12 +8,14 @@ defmodule Doppler.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
-      Doppler.Repo,
       # Start the Telemetry supervisor
       DopplerWeb.Telemetry,
+      # Start the Ecto repository
+      Doppler.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Doppler.PubSub},
+      # Start Finch
+      {Finch, name: Doppler.Finch},
       # Start the Endpoint (http/https)
       DopplerWeb.Endpoint
       # Start a worker by calling: Doppler.Worker.start_link(arg)
