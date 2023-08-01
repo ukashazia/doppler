@@ -6,7 +6,7 @@ defmodule DopplerWeb.Router do
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, html: {DopplerWeb.Layouts, :root}
-    plug :protect_from_forgery
+    # plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
@@ -18,6 +18,11 @@ defmodule DopplerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/servers", ServerController, :index
+    post "/servers", ServerController, :index
+    get "/servers/:name", ServerController, :index
+    post "/servers/create", ServerController, :create
+    post "/servers/delete/:server", ServerController, :delete
   end
 
   # Other scopes may use custom stacks.
