@@ -284,7 +284,7 @@
             <%= for i <- 1..div(@server_count, 10) do %>
               <li>
                 <a
-                  href="#"
+                  href={"?page=#{i-1}"}
                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   <%= i %>
@@ -315,7 +315,7 @@
           <% end %>
           <li>
             <a
-              href="#"
+              href={"?page=#{div(@server_count, 10)}"}
               class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <%= if rem(@server_count, 10) == 0 do %>
@@ -390,7 +390,7 @@
       </div>
       <!-- Modal body -->
       <div>
-      <%= form_for @conn, "/servers/create", fn _f -> %>
+      <%= form_for @changeset, "/servers/create", fn f -> %>
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
           <div>
             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -412,13 +412,14 @@
                       </div> --%>
           <div>
                           <label for="server_tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tag</label>
-                          <select name="server_tags" id="server_tags" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                          <%!-- <select name="server_tags" id="server_tags" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                               <option selected="">Select tag</option>
                               
                               <%= for tag <- @server_tags do %>
                               <option value={tag.id}><%= tag.name %></option>
                               <% end %>
-                          </select>
+                          </select> --%>
+                          <%= multiple_select(f, :server_tags, get_server_tags_in_list() )%>
                       </div>
           <div class="sm:col-span-2">
             <label

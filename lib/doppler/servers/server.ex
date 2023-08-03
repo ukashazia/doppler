@@ -6,7 +6,7 @@ defmodule Doppler.Servers.Server do
     %{"server_tags" => id} = params
     id = String.to_integer(id)
     tag = Repo.get(ServerTags, id)
-
+    IO.inspect(params)
     Server.changeset(%Server{}, params)
     |> Ecto.Changeset.change(%{server_tags: [tag]})
     |> IO.inspect()

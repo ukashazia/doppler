@@ -9,7 +9,7 @@ defmodule Doppler.Schemas.Server do
     has_many :server_tags, ServerTags, on_delete: :delete_all
   end
 
-  def changeset(server = %Server{}, params) do
+  def changeset(server = %Server{}, params \\ %{}) do
     server
     |> cast(params, [:name, :description])
     |> validate_required([:name])

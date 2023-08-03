@@ -6,6 +6,6 @@ defmodule Doppler.Repo.Migrations.ServerTags do
       add :name, :string
       add :server_id, references(:servers)
     end
-    create unique_index(:server_tags, [:name])
+    # create unique_index(:server_tags, [:name])
   end
 end
