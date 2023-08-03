@@ -1,15 +1,24 @@
 defmodule Doppler.Servers.Server do
-  alias Doppler.{Schemas.Server, Repo}
+  alias Doppler.{Schemas.Server, Schemas.ServerTags, Repo}
   import Ecto.Query
 
   def add_server(params) do
+    %{"server_tags" => id} = params
+    id = String.to_integer(id)
+    tag = Repo.get(ServerTags, id)
+
     Server.changeset(%Server{}, params)
+    |> Ecto.Changeset.change(%{server_tags: [tag]})
+    |> IO.inspect()
     |> Repo.insert()
+
+    # IO.inspect(params)
   end
 
   def index(offset) do
     from(s in Server, limit: 10, offset: ^offset)
     |> Repo.all()
+    |> Repo.preload(:server_tags)
   end
 
   def index(offset, server_name) do
@@ -19,6 +28,7 @@ defmodule Doppler.Servers.Server do
       offset: ^offset
     )
     |> Repo.all()
+    |> Repo.preload(:server_tags)
   end
 
   def delete(server_id) do
@@ -44,6 +54,4 @@ defmodule Doppler.Servers.Server do
     [count] = Repo.all(query)
     count
   end
-
-
 end

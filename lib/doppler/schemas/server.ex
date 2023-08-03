@@ -1,11 +1,12 @@
 defmodule Doppler.Schemas.Server do
-  alias Doppler.Schemas.Server
+  alias Doppler.Schemas.{Server, ServerTags}
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "servers" do
     field :name, :string
     field :description, :string
+    has_many :server_tags, ServerTags, on_delete: :delete_all
   end
 
   def changeset(server = %Server{}, params) do
