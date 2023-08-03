@@ -2,11 +2,6 @@ defmodule DopplerWeb.ServerController do
   use DopplerWeb, :controller
 
   def index(conn, _) do
-    # offset = Map.get(conn.params, "page_number") |> String.to_integer()
-    # IO.inspect(offset)
-    # servers = Doppler.Servers.Server.index(String.to_integer(offset)*10, name)
-    # name  = Map.get(conn.params, "name")
-    # server_count = Doppler.Servers.Server.server_count(name)
     server_tags = Doppler.Servers.ServerTags.index()
 
     conn.params
@@ -27,8 +22,10 @@ defmodule DopplerWeb.ServerController do
           }
 
         %{"page" => offset} ->
-          %{server: Doppler.Servers.Server.index(String.to_integer(offset) * 10),
-          server_count: Doppler.Servers.Server.server_count()}
+          %{
+            server: Doppler.Servers.Server.index(String.to_integer(offset) * 10),
+            server_count: Doppler.Servers.Server.server_count()
+          }
 
         %{} ->
           %{
@@ -43,21 +40,6 @@ defmodule DopplerWeb.ServerController do
       servers: servers.server,
       server_tags: server_tags,
       server_count: servers.server_count,
-      layout: false
-    )
-  end
-
-  def index(conn, _) do
-    servers = Doppler.Servers.Server.index(0)
-    server_count = Doppler.Servers.Server.server_count()
-    server_tags = Doppler.Servers.ServerTags.index()
-
-    conn
-    |> put_flash(:info, "load")
-    |> render(:index,
-      servers: servers,
-      server_tags: server_tags,
-      server_count: server_count,
       layout: false
     )
   end
