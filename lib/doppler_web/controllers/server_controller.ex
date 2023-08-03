@@ -1,11 +1,11 @@
 defmodule DopplerWeb.ServerController do
   use DopplerWeb, :controller
-  alias Doppler.{Servers.Server, Servers.ServerTags}
+  alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
   alias Doppler.Schemas.Server, as: ServerSchema
 
   def index(conn, _) do
     server_tags = ServerTags.index()
-    changeset = ServerSchema.changeset(%ServerSchema{})
+    changeset = ServerSchema.changeset(%ServerSchema{} |> Repo.preload(:server_tags))
 
     servers =
       case conn.params do

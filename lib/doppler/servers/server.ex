@@ -3,12 +3,14 @@ defmodule Doppler.Servers.Server do
   import Ecto.Query
 
   def add_server(params) do
-    %{"server_tags" => id} = params
-    id = String.to_integer(id)
-    tag = Repo.get(ServerTags, id)
+    %{"server" => %{"server_tags" => tagid}} = params
+    tagid = Enum.map(tagid, &String.to_integer/1)
+    tag = Enum.map(tagid, &Repo.get(ServerTags, &1))
     IO.inspect(params)
+
+
     Server.changeset(%Server{}, params)
-    |> Ecto.Changeset.change(%{server_tags: [tag]})
+    |> Ecto.Changeset.change(%{server_tags: tag})
     |> IO.inspect()
     |> Repo.insert()
 

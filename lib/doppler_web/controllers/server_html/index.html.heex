@@ -174,7 +174,7 @@
                 >
                   <%= server.name %>
                 </th>
-                <td class="px-4 py-3 break-words overflow-hidden overflow-ellipsis">
+                <td class="flex flex-wrap gap-1 px-4 py-3">
                   <%!-- <%= server.server_tags[:] %> --%>
                   <%= for tag <- server.server_tags do %>
                     <span class="px-2 py-1 mr-1 text-xs font-medium text-white bg-primary-600 rounded-full">
@@ -419,7 +419,7 @@
                               <option value={tag.id}><%= tag.name %></option>
                               <% end %>
                           </select> --%>
-                          <%= multiple_select(f, :server_tags, get_server_tags_in_list() )%>
+                          <%= multiple_select(f, :server_tags, get_server_tags_in_list() ) %>
                       </div>
           <div class="sm:col-span-2">
             <label
