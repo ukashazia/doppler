@@ -6,7 +6,10 @@ defmodule Doppler.Schemas.Server do
   schema "servers" do
     field :name, :string
     field :description, :string
-    many_to_many :server_tags, ServerTags, join_through: "servers_many_to_many_tags", on_delete: :delete_all
+
+    many_to_many :server_tags, ServerTags,
+      join_through: "servers_many_to_many_tags",
+      on_delete: :delete_all
   end
 
   def changeset(server = %Server{}, params \\ %{}) do

@@ -8,7 +8,6 @@ defmodule Doppler.Servers.Server do
     tag = Enum.map(tagid, &Repo.get(ServerTags, &1))
     IO.inspect(params)
 
-
     Server.changeset(%Server{}, params)
     |> Ecto.Changeset.change(%{server_tags: tag})
     |> IO.inspect()
