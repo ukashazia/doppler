@@ -5,8 +5,8 @@ defmodule DopplerWeb.ServerController do
 
   def index(conn, _) do
     server_tags = ServerTags.index()
-    changeset = ServerSchema.changeset(%ServerSchema{} )
-
+    changeset = ServerSchema.changeset(%ServerSchema{} |> Repo.preload(:server_tags) )
+    IO.inspect(%ServerSchema{} |> Repo.preload(:server_tags))
     servers =
       case conn.params do
         %{"name" => name, "page" => offset} ->
