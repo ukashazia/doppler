@@ -7,7 +7,8 @@ defmodule DopplerWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_doppler_key",
-    signing_salt: "CtGwM9AY"
+    signing_salt: "mzuhSqxQ",
+    same_site: "Lax"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
@@ -20,7 +21,7 @@ defmodule DopplerWeb.Endpoint do
     at: "/",
     from: :doppler,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: DopplerWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

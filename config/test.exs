@@ -8,8 +8,8 @@ import Config
 config :doppler, Doppler.Repo,
   username: "postgres",
   password: "postgres",
-  database: "doppler_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
+  database: "doppler_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
@@ -17,14 +17,17 @@ config :doppler, Doppler.Repo,
 # you can enable the server option below.
 config :doppler, DopplerWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "7it8BWs8fPvhFSX9Pv08RHwBxZ9TKc4bQu7wxfMGwHxBKArxX3gZbLUVdOHymTkj",
+  secret_key_base: "ljmz9r3GV87GSwv7/WAH63+47dYU3d0lp//OtJqN6cSZYDlBcCQf/bjnybu+wpuH",
   server: false
 
 # In test we don't send emails.
 config :doppler, Doppler.Mailer, adapter: Swoosh.Adapters.Test
 
+# Disable swoosh api client as it is only required for production adapters.
+config :swoosh, :api_client, false
+
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
