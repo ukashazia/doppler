@@ -19,9 +19,21 @@ defmodule DopplerWeb.Router do
 
     get "/", PageController, :home
     get "/servers", ServerController, :index
-    get "/servers/page/:page", ServerController, :index
-    get "/servers/:name/page/:page", ServerController, :index
-    get "/servers/:name", ServerController, :index
+    get "/servers/search/page/:page", ServerController, :index
+    get "/servers/search/:name/page/:page", ServerController, :index
+    get "/servers/search/:name", ServerController, :index
+    get "/servers/:name", ServerController, :show
+  end
+
+  scope "/", DopplerWeb do
+    pipe_through :browser
+
+    get "/servers/:name/users", UserController, :index
+  end
+
+  scope "/", DopplerWeb do
+    pipe_through [:browser]
+
     post "/servers", ServerController, :index
     post "/servers/create", ServerController, :create
     post "/servers/delete/:server", ServerController, :delete

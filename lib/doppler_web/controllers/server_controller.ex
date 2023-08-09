@@ -36,14 +36,24 @@ defmodule DopplerWeb.ServerController do
       end
 
     conn
-    |> put_flash(:info, "load")
     |> render(:index,
       servers: servers.server,
       server_tags: server_tags,
       server_count: servers.server_count,
-      changeset: changeset,
-      layout: false
+      changeset: changeset
     )
+  end
+
+  def show(conn, %{"name" => name}) do
+    case Server.get_server(name) do
+      {:ok, server} ->
+        conn
+        |> render(:show, server: server)
+
+      {:error} ->
+        conn
+        |> render(:server404)
+    end
   end
 
   def create(conn, server_params) do
@@ -55,7 +65,7 @@ defmodule DopplerWeb.ServerController do
 
       {:error, %Ecto.Changeset{}} ->
         conn
-        |> put_flash(:error, "Something went wrong.")
+        |> put_flash(:error, "Failed to create server, something went wrong.")
         |> redirect(to: "/servers")
     end
   end

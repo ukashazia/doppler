@@ -55,4 +55,18 @@ defmodule Doppler.Servers.Server do
     [count] = Repo.all(query)
     count
   end
+
+  def get_server(name) do
+    case server = Repo.get_by(Server, %{name: name}) |> Repo.preload(:server_tags) do
+      %Server{} -> {:ok, server}
+      nil -> {:error}
+    end
+  end
+
+  def get_server_users(name) do
+    case server = Repo.get_by(Server, %{name: name}) |> Repo.preload(:server_users) do
+      %Server{} -> {:ok, server}
+      nil -> {:error}
+    end
+  end
 end
