@@ -15,18 +15,18 @@ defmodule DopplerWeb.UserController do
     end
   end
 
-  def create(conn, user_params) do
-    case Server.add_user(user_params) do
-      {:ok, _user} ->
-        conn
-        |> redirect(to: "/servers/#{server.name}/users")
-        |> put_flash(:info, "User created successfully.")
+  # def create(conn, user_params) do
+  #   case Server.add_user(user_params) do
+  #     {:ok, _user} ->
+  #       conn
+  #       |> redirect(to: "/servers/#{server.name}/users")
+  #       |> put_flash(:info, "User created successfully.")
 
-      {:error, %Ecto.Changeset{}} ->
-        conn
-        |> put_flash(:error, "Failed to create user, something went wrong.")
-        |> redirect(to: "/servers/#{server.name}/users")
-    end
-  end
+  #     {:error, %Ecto.Changeset{}} ->
+  #       conn
+  #       |> put_flash(:error, "Failed to create user, something went wrong.")
+  #       |> redirect(to: "/servers/#{server.name}/users")
+  #   end
+  # end
 
 end
