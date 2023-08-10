@@ -1,19 +1,22 @@
 defmodule Doppler.Servers.Server do
   alias Doppler.{Schemas.Server, Schemas.ServerTags, Repo}
   import Ecto.Query
+  # alias Doppler.Servers.ServerTags
 
-  def add_server(params) do
-    %{"server" => %{"server_tags" => tagid}} = params
-    tagid = Enum.map(tagid, &String.to_integer/1)
-    tag = Enum.map(tagid, &Repo.get(ServerTags, &1))
-    IO.inspect(params)
+  def add_server(server_params) do
+    tag =
+      if tagid = Map.get(server_params, "server_tags") do
+        Enum.map(tagid, fn x ->
+          Repo.get(ServerTags, x)
+        end)
+      else
+        []
+      end
 
-    Server.changeset(%Server{}, params)
-    |> Ecto.Changeset.change(%{server_tags: tag})
+    Server.changeset(%Server{}, server_params)
+    |> Ecto.Changeset.put_assoc(:server_tags, tag)
     |> IO.inspect()
     |> Repo.insert()
-
-    # IO.inspect(params)
   end
 
   def index(offset) do

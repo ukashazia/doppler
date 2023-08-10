@@ -28,5 +28,4 @@ defmodule DopplerWeb.UserController do
   #       |> redirect(to: "/servers/#{server.name}/users")
   #   end
   # end
-
 end

@@ -18,11 +18,13 @@ defmodule DopplerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/servers", ServerController, :index
-    get "/servers/search/page/:page", ServerController, :index
-    get "/servers/search/:name/page/:page", ServerController, :index
-    get "/servers/search/:name", ServerController, :index
-    get "/servers/:name", ServerController, :show
+    live "/servers", ServerLive
+    live "/servers/create", ServerFormLive
+    # get "/servers", ServerController, :index
+    # get "/servers/search/page/:page", ServerController, :index
+    # get "/servers/search/:name/page/:page", ServerController, :index
+    # get "/servers/search/:name", ServerController, :index
+    live "/servers/:name", ServerShowLive
   end
 
   scope "/", DopplerWeb do
@@ -34,8 +36,8 @@ defmodule DopplerWeb.Router do
   scope "/", DopplerWeb do
     pipe_through [:browser]
 
-    post "/servers", ServerController, :index
-    post "/servers/create", ServerController, :create
+    # post "/servers", ServerController, :index
+    # post "/servers/create", ServerController, :create
     post "/servers/delete/:server", ServerController, :delete
   end
 
