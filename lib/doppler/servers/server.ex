@@ -1,4 +1,5 @@
 defmodule Doppler.Servers.Server do
+  alias Doppler.Servers
   alias Doppler.{Schemas.Server, Schemas.ServerTags, Repo}
   import Ecto.Query
   # alias Doppler.Servers.ServerTags
@@ -71,5 +72,31 @@ defmodule Doppler.Servers.Server do
       %Server{} -> {:ok, server}
       nil -> {:error}
     end
+  end
+
+  def server_user_count(server_name) do
+    # query = from(s in Server,
+    #  preload: [:server_users],
+    #  select: count(s.server_users),
+    #  )
+     server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
+     length(server.server_users)
+    # pattern m atching cuz server_ocunt returns number in a list
+    # [count] = Repo.all(query)
+    # count
+  end
+
+  def server_user_count(server_name, user_name) do
+    query =
+      from(s in Server,
+        preload: [:server_users],
+        where: ilike(s.user_name, ^"%#{user_name}%"),
+        where: ilike(s.server_name, ^"%#{server_name}%"),
+        select: count(s.server_users)
+      )
+
+    # pattern m atching cuz server_ocunt returns number in a list
+    [count] = Repo.all(query)
+    count
   end
 end

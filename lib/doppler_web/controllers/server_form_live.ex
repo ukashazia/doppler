@@ -6,7 +6,7 @@ defmodule DopplerWeb.ServerFormLive do
   alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
   alias Doppler.Schemas.Server, as: ServerSchema
 
-  def mount(params, _session, socket) do
+  def mount(_params, _session, socket) do
     server_tags = ServerTags.index()
     changeset = ServerSchema.changeset(%ServerSchema{} |> Repo.preload(:server_tags))
     # IO.inspect(%ServerSchema{} |> Repo.preload(:server_tags))
@@ -29,7 +29,7 @@ defmodule DopplerWeb.ServerFormLive do
     end)
   end
 
-  def handle_params(unsigned_params, uri, socket) do
+  def handle_params(_unsigned_params, _uri, socket) do
     {:noreply, socket}
   end
 
@@ -38,13 +38,15 @@ defmodule DopplerWeb.ServerFormLive do
     IO.inspect(server_params)
 
     case Server.add_server(server_params) do
-      {:ok, _server} ->
+      {:ok, server} ->
         {:noreply,
          socket
          |> put_flash(:info, "Server created successfully.")
-         |> push_redirect(to: ~p"/servers")}
+         |> push_redirect(to: ~p"/servers/#{server.name}")}
 
       {:error, changeset} ->
+        IO.inspect(changeset)
+
         {:noreply,
          socket
          |> assign(changeset: changeset)
@@ -76,7 +78,8 @@ defmodule DopplerWeb.ServerFormLive do
   end
 
   def handle_event("to_servers", _unsigned_params, socket) do
-    socket = socket
+    socket =
+      socket
       |> push_navigate(to: ~p"/servers")
 
     {:noreply, socket}

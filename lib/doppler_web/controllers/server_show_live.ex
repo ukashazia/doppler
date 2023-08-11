@@ -1,6 +1,7 @@
 defmodule DopplerWeb.ServerShowLive do
   use DopplerWeb, :live_view
   use Phoenix.HTML
+  alias Phoenix.LiveView.JS
   alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
   alias Doppler.Schemas.Server, as: ServerSchema
 
@@ -50,7 +51,32 @@ defmodule DopplerWeb.ServerShowLive do
 
     socket =
       socket
-      |> push_patch(to: ~p"/servers/#{server_name}")
+      |> push_patch(to: ~p"/servers/#{server_name}/info")
+
+    {:noreply, socket}
+  end
+
+
+  def handle_event("show_users", unsigned_params, socket) do
+    {:noreply, socket}
+  end
+
+  def server_info(socket, params) do
+    {:noreply, socket}
+  end
+
+  def server_users(socket, params) do
+    # live_render(socket, DopplerWeb.ServerUsersLive, session: %{})
+    {:noreply, socket}
+  end
+
+  def redirect(socket, params) do
+    server_name = Map.get(params, "name")
+
+    socket =
+      socket
+      |> push_navigate(to: ~p"/servers/#{server_name}/info")
+      |> assign(params: params)
 
     {:noreply, socket}
   end

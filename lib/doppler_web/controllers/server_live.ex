@@ -3,8 +3,8 @@ defmodule DopplerWeb.ServerLive do
   use Phoenix.HTML
   # use DopplerWeb, :controller
 
-  alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
-  alias Doppler.Schemas.Server, as: ServerSchema
+  alias Doppler.{Servers.Server, Servers.ServerTags}
+  # alias Doppler.Schemas.Server, as: ServerSchema
 
   def mount(params, _session, socket) do
     IO.inspect(params)
@@ -98,7 +98,7 @@ defmodule DopplerWeb.ServerLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_btn", unsigned_params, socket) do
+  def handle_event("add_btn", _unsigned_params, socket) do
     socket =
       socket
       |> push_navigate(to: "/servers/create")
@@ -109,13 +109,21 @@ defmodule DopplerWeb.ServerLive do
   def handle_event("search_server", %{"name" => server_name}, socket) do
     IO.puts("Server Name: #{server_name}")
 
-    socket =
-      socket
-      |> assign(params: %{"name" => server_name})
-      |> push_patch(to: "/servers")
+    if server_name == "" do
+      socket =
+        socket
+        |> push_patch(to: "/servers")
 
-    IO.inspect(socket.assigns.params)
-    {:noreply, socket}
+      {:noreply, socket}
+    else
+      socket =
+        socket
+        |> assign(params: %{"name" => server_name})
+        |> push_patch(to: "/servers/search/#{server_name}")
+
+      IO.inspect(socket.assigns.params)
+      {:noreply, socket}
+    end
   end
 
   def handle_event("server_show", params, socket) do
@@ -124,7 +132,7 @@ defmodule DopplerWeb.ServerLive do
 
     socket =
       socket
-      |> push_navigate(to: "/servers/#{name}")
+      |> push_navigate(to: "/servers/#{name}/info")
 
     {:noreply, socket}
   end
