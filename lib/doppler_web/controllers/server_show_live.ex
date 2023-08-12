@@ -1,6 +1,7 @@
 defmodule DopplerWeb.ServerShowLive do
   use DopplerWeb, :live_view
   use Phoenix.HTML
+  # use Phoenix.Component
   alias Phoenix.LiveView.JS
   alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
   alias Doppler.Schemas.Server, as: ServerSchema
@@ -29,11 +30,11 @@ defmodule DopplerWeb.ServerShowLive do
     end
   end
 
-  def handle_params(unsigned_params, uri, socket) do
+  def handle_params(params, url, socket) do
     {:noreply, socket}
   end
 
-  def handle_event("delete_server", params, socket) do
+  def handle_event("delete_server", _params, socket) do
     server_id = socket.assigns.server.id
 
     Server.delete(server_id)
@@ -46,27 +47,14 @@ defmodule DopplerWeb.ServerShowLive do
     {:noreply, socket}
   end
 
-  def handle_event("server_info", unsigned_params, socket) do
+  def handle_event("add_server_user", params, socket) do
     server_name = socket.assigns.server.name
 
     socket =
       socket
-      |> push_patch(to: ~p"/servers/#{server_name}/info")
+      |> assign(server: socket.assigns.server)
+      |> push_navigate(to: "/servers/#{server_name}/users/create")
 
-    {:noreply, socket}
-  end
-
-
-  def handle_event("show_users", unsigned_params, socket) do
-    {:noreply, socket}
-  end
-
-  def server_info(socket, params) do
-    {:noreply, socket}
-  end
-
-  def server_users(socket, params) do
-    # live_render(socket, DopplerWeb.ServerUsersLive, session: %{})
     {:noreply, socket}
   end
 
@@ -75,7 +63,7 @@ defmodule DopplerWeb.ServerShowLive do
 
     socket =
       socket
-      |> push_navigate(to: ~p"/servers/#{server_name}/info")
+      |> push_navigate(to: "/servers/#{server_name}/info")
       |> assign(params: params)
 
     {:noreply, socket}

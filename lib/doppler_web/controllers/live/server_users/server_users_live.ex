@@ -1,12 +1,15 @@
-defmodule DopplerWeb.ServerUsersLive do
+defmodule DopplerWeb.Live.ServerUsers.ServerUsersLive do
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias Doppler.{Servers.Server, Servers.ServerTags, Repo, Users.User}
   alias Doppler.Schemas.Server, as: ServerSchema
 
+  def mount(socket) do
+    {:ok, socket}
+  end
 
-  def mount(params, _session, socket) do
-    server_name = Map.get(params, "name")
+  def update(assigns, socket) do
+    server_name = assigns.server.name
 
     server_user_count = Server.server_user_count(server_name)
 
@@ -17,7 +20,6 @@ defmodule DopplerWeb.ServerUsersLive do
           |> assign(
             user_count: server_user_count,
             server: server,
-            params: params,
             server_users: server.server_users
           )
 
@@ -33,4 +35,13 @@ defmodule DopplerWeb.ServerUsersLive do
     end
   end
 
+  def handle_event("add_server_user", params, socket) do
+    server_name = socket.assigns.server.name
+
+    socket =
+      socket
+      |> push_navigate(to: "/servers/#{server_name}")
+
+    {:noreply, socket}
+  end
 end

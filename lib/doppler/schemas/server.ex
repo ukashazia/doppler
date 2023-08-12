@@ -11,9 +11,7 @@ defmodule Doppler.Schemas.Server do
       join_through: "servers_many_to_many_tags",
       on_delete: :delete_all
 
-    many_to_many :server_users, ServerUsers,
-      join_through: "servers_many_to_many_users",
-      on_delete: :delete_all
+    has_many :server_users, ServerUsers, on_delete: :delete_all
   end
 
   def changeset(server = %Server{}, params \\ %{}) do

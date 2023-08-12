@@ -1,6 +1,6 @@
 defmodule Doppler.Servers.Server do
   alias Doppler.Servers
-  alias Doppler.{Schemas.Server, Schemas.ServerTags, Repo}
+  alias Doppler.{Schemas.Server, Schemas.ServerUsers, Schemas.ServerTags, Repo, Users.User}
   import Ecto.Query
   # alias Doppler.Servers.ServerTags
 
@@ -79,8 +79,8 @@ defmodule Doppler.Servers.Server do
     #  preload: [:server_users],
     #  select: count(s.server_users),
     #  )
-     server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
-     length(server.server_users)
+    server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
+    length(server.server_users)
     # pattern m atching cuz server_ocunt returns number in a list
     # [count] = Repo.all(query)
     # count
@@ -98,5 +98,48 @@ defmodule Doppler.Servers.Server do
     # pattern m atching cuz server_ocunt returns number in a list
     [count] = Repo.all(query)
     count
+  end
+
+  def add_user(server_name, user_params) do
+    IO.inspect(user_params)
+    server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
+    # user_changeset = ServerUsers.changeset(%ServerUsers{}, user_params)
+    # server_changeset = Ecto.Changeset.change(server)
+    # |> Ecto.Changeset.put_assoc(:server_users, [user_changeset])
+    # |> Repo.update()
+
+    # user = Ecto.build_assoc(server, :server_users, user_params)
+    # Repo.insert(user)
+
+    user_changeset =
+      ServerUsers.changeset(%ServerUsers{}, user_params)
+      |> Ecto.Changeset.put_assoc(:server, server)
+      |> IO.inspect()
+
+    case Repo.insert(user_changeset) do
+      {:ok, user} ->
+        IO.inspect(user)
+        {:ok, user}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+
+    # case User.add_user(user_params) do
+    #   {:ok, user} ->
+    #     IO.inspect(user)
+
+    #     server
+    #     |> IO.inspect()
+    #     |> Ecto.Changeset.change()
+    #     |> IO.inspect()
+    #     |> Ecto.build_assoc(:server_users, [user])
+    #     |> Repo.update()
+
+    #     {:ok, user}
+
+    #   {:error, changeset} ->
+    #     {:error, changeset}
+    # end
   end
 end

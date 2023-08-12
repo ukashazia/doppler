@@ -1,4 +1,4 @@
-defmodule DopplerWeb.ServerFormLive do
+defmodule DopplerWeb.Live.ServerForm.ServerFormLive do
   use DopplerWeb, :live_view
   use Phoenix.HTML
   # use DopplerWeb, :controller
@@ -42,7 +42,7 @@ defmodule DopplerWeb.ServerFormLive do
         {:noreply,
          socket
          |> put_flash(:info, "Server created successfully.")
-         |> push_redirect(to: ~p"/servers/#{server.name}")}
+         |> push_redirect(to: ~p"/servers/#{server.name}/info")}
 
       {:error, changeset} ->
         IO.inspect(changeset)

@@ -7,7 +7,7 @@ defmodule Doppler.Schemas.ServerUsers do
     field :username, :string
     field :email, :string
 
-    many_to_many :server, Server, join_through: "servers_many_to_many_users"
+    belongs_to :server, Server
   end
 
   def changeset(%ServerUsers{} = server_users, params \\ %{}) do
@@ -15,7 +15,8 @@ defmodule Doppler.Schemas.ServerUsers do
     |> cast(params, [:username, :email])
     |> validate_required(:username)
     |> validate_required(:email)
-    |> unique_constraint([:email, :username])
+    |> unique_constraint(:email, message: "Email already exists")
+    |> unique_constraint(:username)
     |> validate_format(:username, ~r/^[a-zA-Z0-9_]+$/)
     |> validate_format(:email, ~r/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
   end

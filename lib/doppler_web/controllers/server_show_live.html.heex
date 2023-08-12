@@ -2,28 +2,30 @@
   <div class="flex mx-auto">
     <ul class="flex w-auto mx-auto bg-white flex-wrap shadow-md p-2 rounded-lg text-sm font-medium text-center text-gray-500 dark:text-gray-400">
       <li class="mr-2">
-        <div
-        id="server-info-btn"
-          phx-click="server_info"
+        <.link
+          phx-click={JS.set_attribute({"aria-checked", "true"}, to: "#server-info-btn")}
+          id="server-info-btn"
+          patch={~p"/servers/#{@server.name}/info"}
           class="cursor-pointer aria-checked:bg-blue-600 aria-checked:text-white aria-checked:hover:bg-blue-600 aria-checked:hover:text-white inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
         >
           Server Info
-        </div>
-      </li>
-      <li class="mr-2">
-        <div 
-        id="server-posts-btn"
-          phx-click="server_posts"
-          class="cursor-pointer aria-checked:bg-blue-600 aria-checked:text-white aria-checked:hover:bg-blue-600 aria-checked:hover:text-white inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
-        >
-          Posts
-        </div>
+        </.link>
       </li>
       <li class="mr-2">
         <.link
-        id="server-users-btn"
-          
+          id="server-posts-btn"
+          patch={~p"/servers/#{@server.name}/posts"}
+          class="cursor-pointer aria-checked:bg-blue-600 aria-checked:text-white aria-checked:hover:bg-blue-600 aria-checked:hover:text-white inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+        >
+          Posts
+        </.link>
+      </li>
+      <li class="mr-2">
+        <.link
+          id="server-users-btn"
+          phx-click={JS.set_attribute({"aria-checked", "true"}, to: "#server-users-btn")}
           patch={~p"/servers/#{@server.name}/users"}
+          phx-throttle="500"
           class="cursor-pointer aria-checked:bg-blue-600 aria-checked:text-white aria-checked:hover:bg-blue-600 aria-checked:hover:text-white inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
         >
           Users
@@ -32,7 +34,7 @@
     </ul>
   </div>
   <%= if @live_action == :server_info do %>
-    <div phx-mounted={JS.set_attribute({"aria-checked", "true"}, to: "#server-info-btn")} class="mt-20 max-w-2xl mx-auto">
+    <div class="mt-20 max-w-2xl mx-auto">
       <div class="relative bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
         <%!-- <img
         class="w-full h-auto rounded-xl"
@@ -70,8 +72,11 @@
     </div>
   <% end %>
   <%= if @live_action == :server_users do %>
-    <div phx-mounted={JS.set_attribute({"aria-checked", "true"}, to: "#server-users-btn")} class="mt-20 max-w-2xl mx-auto">
-      <%= live_component( @socket, DopplerWeb.ServerUsersLive , id: "server-users") %>
+    <div class="mt-20 max-w-2xl mx-auto">
+      <%= live_component(DopplerWeb.Live.ServerUsers.ServerUsersLive,
+        id: "#{@server.name}",
+        server: @server
+      ) %>
     </div>
   <% end %>
 </div>
@@ -81,7 +86,7 @@
   phx-click={JS.hide(to: "#delete-modal")}
   tabindex="-1"
   class="fixed w-screen backdrop-blur-sm bg-gray-50/20 h-screen overflow-hidden top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full"
-  >
+>
   <div class="relative w-full h-full">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md max-h-full">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
