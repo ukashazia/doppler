@@ -1,13 +1,14 @@
 defmodule Doppler.Schemas.ServerUsers do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Doppler.Schemas.{ServerUsers, Server}
+  alias Doppler.Schemas.{ServerUsers, Server, ServerPosts}
 
   schema "server_users" do
     field :username, :string
     field :email, :string
 
     belongs_to :server, Server
+    has_many :posts, ServerPosts, on_delete: :delete_all
   end
 
   def changeset(%ServerUsers{} = server_users, params \\ %{}) do

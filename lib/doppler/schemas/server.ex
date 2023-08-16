@@ -1,5 +1,5 @@
 defmodule Doppler.Schemas.Server do
-  alias Doppler.Schemas.{Server, ServerTags, ServerUsers}
+  alias Doppler.Schemas.{Server, ServerTags, ServerUsers, ServerPosts}
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -12,6 +12,7 @@ defmodule Doppler.Schemas.Server do
       on_delete: :delete_all
 
     has_many :server_users, ServerUsers, on_delete: :delete_all
+    has_many :post, ServerPosts, on_delete: :delete_all
   end
 
   def changeset(server = %Server{}, params \\ %{}) do
