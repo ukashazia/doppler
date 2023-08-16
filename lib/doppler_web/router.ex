@@ -23,7 +23,6 @@ defmodule DopplerWeb.Router do
     live "/servers/search/:name", ServerLive
     live "/servers/:name/info", ServerShowLive, :server_info
     live "/servers/:name", ServerShowLive, :redirect
-    get "/servers/search/:name/page/:page", ServerController, :index
   end
 
   scope "/", DopplerWeb do
