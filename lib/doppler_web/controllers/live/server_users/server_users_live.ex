@@ -1,8 +1,7 @@
 defmodule DopplerWeb.Live.ServerUsers.ServerUsersLive do
   use Phoenix.LiveComponent
   use Phoenix.HTML
-  alias Doppler.{Servers.Server, Servers.ServerTags, Repo, Users.User}
-  alias Doppler.Schemas.Server, as: ServerSchema
+  alias Doppler.{Servers.Server}
 
   def mount(socket) do
     {:ok, socket}
@@ -35,7 +34,7 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUsersLive do
     end
   end
 
-  def handle_event("add_server_user", params, socket) do
+  def handle_event("add_server_user", _params, socket) do
     server_name = socket.assigns.server.name
 
     socket =

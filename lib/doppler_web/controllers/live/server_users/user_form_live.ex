@@ -1,9 +1,8 @@
 defmodule DopplerWeb.Live.ServerUsers.UserFormLive do
   use DopplerWeb, :live_view
   use Phoenix.HTML
-  # use DopplerWeb, :controller
 
-  alias Doppler.{Servers.Server, Servers.ServerTags, Repo, Users.User}
+  alias Doppler.{Servers.Server}
   alias Doppler.Schemas.ServerUsers, as: UserSchema
 
   def mount(params, _session, socket) do
@@ -35,7 +34,7 @@ defmodule DopplerWeb.Live.ServerUsers.UserFormLive do
     server_name = socket.assigns.server.name
 
     case Server.add_user(server_name, user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         {:noreply,
          socket
          |> put_flash(:info, "User created successfully.")

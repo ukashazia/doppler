@@ -142,18 +142,24 @@
                 Choose Tags
               </h6>
               <%= form_for @server_filters, "/servers/", [phx_submit: :server_tag_filter, as: :filters], fn f -> %>
-              <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
+                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
+                  <%= for tag <- @server_tags_in_list do %>
+                    <li class="flex items-center">
+                      <%= checkbox(f, tag.name,
+                        class:
+                          "w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                      ) %>
 
-                <%= for tag <- @server_tags_in_list do %>
-                <li class="flex items-center">
-               
-                 <%= checkbox f, tag.name, class: "w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" %>
-                 
-                  <%= label f, tag.name, tag.name, class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-100" %>
-                </li>
-               <% end %>
-              </ul>
-              <%= submit "Filter", class: "mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" %>
+                      <%= label(f, tag.name, tag.name,
+                        class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+                      ) %>
+                    </li>
+                  <% end %>
+                </ul>
+                <%= submit("Filter",
+                  class:
+                    "mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                ) %>
               <% end %>
             </div>
           </div>
@@ -245,7 +251,6 @@
             <%= for i <- 1..div(@server_count, 10) + 1 do %>
               <li>
                 <.link
-                  
                   patch={"?page=#{i}"}
                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >

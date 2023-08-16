@@ -1,8 +1,6 @@
 defmodule Doppler.Servers.Server do
-  alias Doppler.Servers
-  alias Doppler.{Schemas.Server, Schemas.ServerUsers, Schemas.ServerTags, Repo, Users.User}
+  alias Doppler.{Schemas.Server, Schemas.ServerUsers, Schemas.ServerTags, Repo}
   import Ecto.Query
-  # alias Doppler.Servers.ServerTags
 
   def add_server(server_params) do
     tag =
@@ -34,10 +32,12 @@ defmodule Doppler.Servers.Server do
   end
 
   defp apply_pagination(query, offset) when not is_nil(offset) do
-    offset = offset
-    |> String.to_integer()
-    |> Kernel.-(1)
-    |> Kernel.*(10)
+    offset =
+      offset
+      |> String.to_integer()
+      |> Kernel.-(1)
+      |> Kernel.*(10)
+
     # offset = String.to_integer(offset) * 10
     from(s in query, limit: 10, offset: ^offset)
   end

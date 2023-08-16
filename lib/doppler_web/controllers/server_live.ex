@@ -92,7 +92,7 @@ defmodule DopplerWeb.ServerLive do
     filters =
       filters
       |> Enum.reject(fn {_, v} -> v == "false" end)
-      |> Enum.map(fn {k, v} ->
+      |> Enum.map(fn {k, _v} ->
         [k]
       end)
       |> List.flatten()
@@ -104,17 +104,6 @@ defmodule DopplerWeb.ServerLive do
       |> push_patch(to: ~p"/servers?#{filters}")
 
     {:noreply, socket}
-  end
-
-  defp decode_query_params(query_params) do
-    query_params
-    |> String.split("&")
-    |> Enum.map(fn string ->
-      [_, tag] = String.split(string, "=")
-      ["#{tag}": true]
-    end)
-    |> List.flatten()
-    |> Enum.into(%{})
   end
 
   defp get_server_tags_in_list() do

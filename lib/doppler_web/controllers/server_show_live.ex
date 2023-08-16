@@ -1,10 +1,8 @@
 defmodule DopplerWeb.ServerShowLive do
   use DopplerWeb, :live_view
   use Phoenix.HTML
-  # use Phoenix.Component
   alias Phoenix.LiveView.JS
-  alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
-  alias Doppler.Schemas.Server, as: ServerSchema
+  alias Doppler.{Servers.Server}
 
   def mount(params, _session, socket) do
     server_name = Map.get(params, "name")
@@ -30,7 +28,7 @@ defmodule DopplerWeb.ServerShowLive do
     end
   end
 
-  def handle_params(params, url, socket) do
+  def handle_params(_params, _url, socket) do
     {:noreply, socket}
   end
 
@@ -47,7 +45,7 @@ defmodule DopplerWeb.ServerShowLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_server_user", params, socket) do
+  def handle_event("add_server_user", _params, socket) do
     server_name = socket.assigns.server.name
 
     socket =
