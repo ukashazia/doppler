@@ -18,13 +18,19 @@ defmodule DopplerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/servers", ServerController, :index
-    get "/servers/page/:page", ServerController, :index
-    get "/servers/:name/page/:page", ServerController, :index
-    get "/servers/:name", ServerController, :index
-    post "/servers", ServerController, :index
-    post "/servers/create", ServerController, :create
-    post "/servers/delete/:server", ServerController, :delete
+    live "/servers", ServerLive
+    live "/servers/create", Live.ServerForm.ServerFormLive
+    live "/servers/search/:name", ServerLive
+    live "/servers/:name/info", ServerShowLive, :server_info
+    live "/servers/:name", ServerShowLive, :redirect
+    get "/servers/search/:name/page/:page", ServerController, :index
+  end
+
+  scope "/", DopplerWeb do
+    pipe_through :browser
+    live "/servers/:name/users", ServerShowLive, :server_users
+    live "/servers/:name/users/create", Live.ServerUsers.UserFormLive
+    # live "/servers/:name/users", ServerUsersLive
   end
 
   # Other scopes may use custom stacks.

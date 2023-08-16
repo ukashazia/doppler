@@ -1,18 +1,24 @@
 defmodule Doppler.Schemas.Server do
-  alias Doppler.Schemas.{Server, ServerTags}
+  alias Doppler.Schemas.{Server, ServerTags, ServerUsers}
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "servers" do
     field :name, :string
     field :description, :string
-    many_to_many :server_tags, ServerTags, join_through: "servers_many_to_many_tags", on_delete: :delete_all
+
+    many_to_many :server_tags, ServerTags,
+      join_through: "servers_many_to_many_tags",
+      on_delete: :delete_all
+
+    has_many :server_users, ServerUsers, on_delete: :delete_all
   end
 
   def changeset(server = %Server{}, params \\ %{}) do
     server
     |> cast(params, [:name, :description])
-    |> cast_assoc(:server_tags)
+    # |> cast_assoc(:server_tags)
+    # |> cast_assoc(:server_users)
     |> validate_required([:name])
     |> unique_constraint(:name)
     |> validate_format(:name, ~r/^[a-zA-Z0-9_]+$/)
