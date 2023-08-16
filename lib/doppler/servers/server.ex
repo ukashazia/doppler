@@ -20,21 +20,45 @@ defmodule Doppler.Servers.Server do
     |> Repo.insert()
   end
 
-  def index(offset) do
-    from(s in Server, limit: 10, offset: ^offset)
-    |> Repo.all()
+  def index(offset, server_name, filters) do
+    query = from(s in Server)
+
+    query =
+      query
+      |> apply_search(server_name)
+      |> apply_filters(filters)
+      |> apply_pagination(offset)
+
+    Repo.all(query)
     |> Repo.preload(:server_tags)
   end
 
-  def index(offset, server_name) do
-    from(s in Server,
-      limit: 10,
-      where: ilike(s.name, ^"%#{server_name}%"),
-      offset: ^offset
-    )
-    |> Repo.all()
-    |> Repo.preload(:server_tags)
+  defp apply_pagination(query, offset) when not is_nil(offset) do
+    offset = offset
+    |> String.to_integer()
+    |> Kernel.-(1)
+    |> Kernel.*(10)
+    # offset = String.to_integer(offset) * 10
+    from(s in query, limit: 10, offset: ^offset)
   end
+
+  defp apply_pagination(query, _), do: from(s in query, limit: 10, offset: 0)
+
+  defp apply_filters(query, filters) when not is_nil(filters) do
+    from(s in query,
+      join: t in assoc(s, :server_tags),
+      where: t.name in ^filters,
+      distinct: s
+    )
+  end
+
+  defp apply_filters(query, _), do: query
+
+  defp apply_search(query, server_name) when not is_nil(server_name) do
+    from(s in query, where: ilike(s.name, ^"%#{server_name}%"))
+  end
+
+  defp apply_search(query, _), do: query
 
   def delete(server_id) do
     Repo.get(Server, server_id)
@@ -103,13 +127,6 @@ defmodule Doppler.Servers.Server do
   def add_user(server_name, user_params) do
     IO.inspect(user_params)
     server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
-    # user_changeset = ServerUsers.changeset(%ServerUsers{}, user_params)
-    # server_changeset = Ecto.Changeset.change(server)
-    # |> Ecto.Changeset.put_assoc(:server_users, [user_changeset])
-    # |> Repo.update()
-
-    # user = Ecto.build_assoc(server, :server_users, user_params)
-    # Repo.insert(user)
 
     user_changeset =
       ServerUsers.changeset(%ServerUsers{}, user_params)
@@ -124,22 +141,5 @@ defmodule Doppler.Servers.Server do
       {:error, changeset} ->
         {:error, changeset}
     end
-
-    # case User.add_user(user_params) do
-    #   {:ok, user} ->
-    #     IO.inspect(user)
-
-    #     server
-    #     |> IO.inspect()
-    #     |> Ecto.Changeset.change()
-    #     |> IO.inspect()
-    #     |> Ecto.build_assoc(:server_users, [user])
-    #     |> Repo.update()
-
-    #     {:ok, user}
-
-    #   {:error, changeset} ->
-    #     {:error, changeset}
-    # end
   end
 end

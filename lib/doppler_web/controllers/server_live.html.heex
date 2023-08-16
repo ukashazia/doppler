@@ -66,12 +66,12 @@
             Add server
           </button>
           <div class="flex items-center space-x-3 w-full md:w-auto">
-            <button
+            <%!-- <button
               id="actionsDropdownButton"
               data-dropdown-toggle="actionsDropdown"
               class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
               type="button"
-            >
+              >
               <svg
                 class="-ml-1 mr-1.5 w-5 h-5"
                 fill="currentColor"
@@ -86,11 +86,11 @@
                 />
               </svg>
               Actions
-            </button>
-            <div
+            </button> --%>
+            <%!-- <div
               id="actionsDropdown"
               class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-            >
+              >
               <div class="py-1">
                 <a
                   href="#"
@@ -99,7 +99,7 @@
                   Some action here
                 </a>
               </div>
-            </div>
+            </div> --%>
             <button
               id="filterDropdownButton"
               data-dropdown-toggle="filterDropdown"
@@ -139,24 +139,22 @@
               class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
             >
               <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
-                Choose Category
+                Choose Tags
               </h6>
+              <%= form_for @server_filters, "/servers/", [phx_submit: :server_tag_filter, as: :filters], fn f -> %>
               <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
+
+                <%= for tag <- @server_tags_in_list do %>
                 <li class="flex items-center">
-                  <input
-                    id="benq"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    for="benq"
-                    class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Media
-                  </label>
+               
+                 <%= checkbox f, tag.name, class: "w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" %>
+                 
+                  <%= label f, tag.name, tag.name, class: "ml-2 text-sm font-medium text-gray-900 dark:text-gray-100" %>
                 </li>
+               <% end %>
               </ul>
+              <%= submit "Filter", class: "mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" %>
+              <% end %>
             </div>
           </div>
         </div>
@@ -215,8 +213,8 @@
         </span>
         <ul class="inline-flex items-stretch -space-x-px">
           <li>
-            <a
-              href="#"
+            <.link
+              patch={"?page=#{1}"}
               class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span class="sr-only">Previous</span>
@@ -233,7 +231,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-            </a>
+            </.link>
           </li>
           <%!-- <li>
             <a
@@ -244,14 +242,15 @@
             </a>
           </li> --%>
           <%= if div(@server_count, 10) >= 1 do %>
-            <%= for i <- 1..div(@server_count, 10) do %>
+            <%= for i <- 1..div(@server_count, 10) + 1 do %>
               <li>
-                <a
-                  href={"?page=#{i-1}"}
+                <.link
+                  
+                  patch={"?page=#{i}"}
                   class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   <%= i %>
-                </a>
+                </.link>
               </li>
             <% end %>
             <%!-- <%  else %>
@@ -266,17 +265,17 @@
               </li>
             <% end %> --%>
           <% end %>
-          <%= if div(@server_count, 10) >= 4 do %>
+          <%!-- <%= if div(@server_count, 10) >= 4 do %>
             <li>
-              <a
-                href="#"
+              <div
+               
                 class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 ...
-              </a>
+              </div>
             </li>
-          <% end %>
-          <li>
+          <% end %> --%>
+          <%!-- <li>
             <a
               href={"?page=#{div(@server_count, 10)}"}
               class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -284,13 +283,13 @@
               <%= if rem(@server_count, 10) == 0 do %>
                 <%= div(@server_count, 10) %>
               <% else %>
-                <%= div(@server_count, 10) + 1 %>
+                <%= div(@server_count, 10) %>
               <% end %>
             </a>
-          </li>
+          </li> --%>
           <li>
-            <a
-              href="#"
+            <.link
+              patch={"?page=#{div(@server_count, 10) + 1}"}
               class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span class="sr-only">Next</span>
@@ -307,7 +306,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-            </a>
+            </.link>
           </li>
         </ul>
       </nav>

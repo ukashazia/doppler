@@ -3,39 +3,14 @@ defmodule DopplerWeb.ServerLive do
   use Phoenix.HTML
   # use DopplerWeb, :controller
 
-  alias Doppler.{Servers.Server, Servers.ServerTags}
+  alias Doppler.{Servers.Server, Servers.ServerTags, Repo}
   # alias Doppler.Schemas.Server, as: ServerSchema
 
   def mount(params, _session, socket) do
-    IO.inspect(params)
     server_tags = ServerTags.index()
-
-    servers =
-      case params do
-        %{"name" => name, "page" => offset} ->
-          %{
-            server: Server.index(String.to_integer(offset) * 10, name),
-            server_count: Server.server_count(name)
-          }
-
-        %{"name" => name} ->
-          %{
-            server: Server.index(0, name),
-            server_count: Server.server_count(name)
-          }
-
-        %{"page" => offset} ->
-          %{
-            server: Server.index(String.to_integer(offset) * 10),
-            server_count: Server.server_count()
-          }
-
-        %{} ->
-          %{
-            server: Server.index(0),
-            server_count: Server.server_count()
-          }
-      end
+    server_tags_in_list = get_server_tags_in_list()
+    IO.inspect(params)
+    servers = servers(params)
 
     socket =
       socket
@@ -44,47 +19,21 @@ defmodule DopplerWeb.ServerLive do
         server_tags: server_tags,
         server_count: servers.server_count,
         params: params,
-        page_title: "Servers"
+        page_title: "Servers",
+        server_tags_in_list: server_tags_in_list,
+        server_filters: %{}
       )
 
-    # IO.inspect(socket.assigns)
     {:ok, socket}
   end
 
   def handle_params(params, _url, socket) do
-    IO.puts("Handle Params")
+    # IO.puts("Handle Params")
     IO.inspect(params)
-    params = socket.assigns.params
+    # params = socket.assigns.params
     server_tags = ServerTags.index()
 
-    # IO.inspect(%ServerSchema{} |> Repo.preload(:server_tags))
-
-    servers =
-      case params do
-        %{"name" => name, "page" => offset} ->
-          %{
-            server: Server.index(String.to_integer(offset) * 10, name),
-            server_count: Server.server_count(name)
-          }
-
-        %{"name" => name} ->
-          %{
-            server: Server.index(0, name),
-            server_count: Server.server_count(name)
-          }
-
-        %{"page" => offset} ->
-          %{
-            server: Server.index(String.to_integer(offset) * 10),
-            server_count: Server.server_count()
-          }
-
-        %{} ->
-          %{
-            server: Server.index(0),
-            server_count: Server.server_count()
-          }
-      end
+    servers = servers(params)
 
     socket =
       socket
@@ -92,7 +41,7 @@ defmodule DopplerWeb.ServerLive do
         servers: servers.server,
         server_tags: server_tags,
         server_count: servers.server_count,
-        params: params
+        params: socket.assigns.params
       )
 
     {:noreply, socket}
@@ -119,7 +68,7 @@ defmodule DopplerWeb.ServerLive do
       socket =
         socket
         |> assign(params: %{"name" => server_name})
-        |> push_patch(to: "/servers/search/#{server_name}")
+        |> push_patch(to: "/servers?name=#{server_name}")
 
       IO.inspect(socket.assigns.params)
       {:noreply, socket}
@@ -135,5 +84,56 @@ defmodule DopplerWeb.ServerLive do
       |> push_navigate(to: "/servers/#{name}/info")
 
     {:noreply, socket}
+  end
+
+  def handle_event("server_tag_filter", %{"filters" => filters}, socket) do
+    IO.inspect(filters)
+
+    filters =
+      filters
+      |> Enum.reject(fn {_, v} -> v == "false" end)
+      |> Enum.map(fn {k, v} ->
+        [k]
+      end)
+      |> List.flatten()
+
+    filters = %{"tags" => filters}
+
+    socket =
+      socket
+      |> push_patch(to: ~p"/servers?#{filters}")
+
+    {:noreply, socket}
+  end
+
+  defp decode_query_params(query_params) do
+    query_params
+    |> String.split("&")
+    |> Enum.map(fn string ->
+      [_, tag] = String.split(string, "=")
+      ["#{tag}": true]
+    end)
+    |> List.flatten()
+    |> Enum.into(%{})
+  end
+
+  defp get_server_tags_in_list() do
+    Repo.all(Doppler.Schemas.ServerTags)
+    |> Enum.map(fn tag ->
+      %{name: tag.name, id: tag.id}
+    end)
+  end
+
+  defp servers(params) do
+    IO.inspect(params)
+
+    offset = params["page"] || nil
+    name = params["name"] || nil
+    tags = params["tags"] || nil
+
+    %{
+      server: Server.index(offset, name, tags),
+      server_count: Server.server_count(name)
+    }
   end
 end
