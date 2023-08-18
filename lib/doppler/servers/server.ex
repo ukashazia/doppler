@@ -151,6 +151,21 @@ defmodule Doppler.Servers.Server do
     end
   end
 
+  def remove_server_user(user_name, server_name) do
+    query =
+      from(
+        u in ServerUsers,
+        join: s in assoc(u, :server),
+        where: u.username == ^user_name and s.name == ^server_name,
+        select: u
+      )
+
+    case Repo.all(query) do
+      [] -> {:error, "No such user"}
+      [user] -> Repo.delete(user)
+    end
+  end
+
   def list_server_posts(server_name) do
     query =
       from(

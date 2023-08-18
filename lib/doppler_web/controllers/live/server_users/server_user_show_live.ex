@@ -18,7 +18,26 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUserShowLive do
     {:ok, socket}
   end
 
-  def handle_event(_event, _unsigned_params, socket) do
-    {:noreply, socket}
+  def handle_event("remove_user", _params, socket) do
+    username = socket.assigns.user.username
+    server_name = socket.assigns.user.server.name
+
+    case Doppler.Servers.Server.remove_server_user(username, server_name) do
+      {:error, message} ->
+        socket =
+          socket
+          |> put_flash(:error, message)
+          |> push_navigate(to: ~p"/servers/#{server_name}/users")
+
+        {:noreply, socket}
+
+      {:ok, _user} ->
+        socket =
+          socket
+          |> put_flash(:info, "User removed")
+          |> push_navigate(to: ~p"/servers/#{server_name}/users")
+
+        {:noreply, socket}
+    end
   end
 end
