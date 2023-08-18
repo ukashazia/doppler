@@ -80,6 +80,14 @@
       ) %>
     </div>
   <% end %>
+  <%= if @live_action == :server_posts do %>
+    <div class="mt-20 max-w-2xl mx-auto">
+      <%= live_component(DopplerWeb.Live.ServerPosts.ServerPostsLive,
+        id: "#{@server.name}",
+        server: @server
+      ) %>
+    </div>
+  <% end %>
 </div>
 
 <div

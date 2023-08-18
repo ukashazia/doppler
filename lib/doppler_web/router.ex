@@ -22,6 +22,7 @@ defmodule DopplerWeb.Router do
     live "/servers/create", Live.ServerForm.ServerFormLive
     live "/servers/search/:name", ServerLive
     live "/servers/:name/info", ServerShowLive, :server_info
+    live "/servers/:name/posts", ServerShowLive, :server_posts
     live "/servers/:name", ServerShowLive, :redirect
   end
 
@@ -29,7 +30,6 @@ defmodule DopplerWeb.Router do
     pipe_through :browser
     live "/servers/:name/users", ServerShowLive, :server_users
     live "/servers/:name/users/create", Live.ServerUsers.UserFormLive
-    # live "/servers/:name/users", ServerUsersLive
   end
 
   # Other scopes may use custom stacks.
