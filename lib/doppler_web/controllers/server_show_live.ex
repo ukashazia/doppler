@@ -6,6 +6,7 @@ defmodule DopplerWeb.ServerShowLive do
 
   def mount(params, _session, socket) do
     server_name = Map.get(params, "name")
+    user_count = Server.server_user_count(server_name)
 
     case Server.get_server(server_name) do
       {:ok, server} ->
@@ -14,7 +15,8 @@ defmodule DopplerWeb.ServerShowLive do
           |> assign(
             server: server,
             params: params,
-            page_title: "#{server.name}"
+            page_title: "#{server.name}",
+            user_count: user_count
           )
 
         {:ok, socket}
@@ -45,25 +47,6 @@ defmodule DopplerWeb.ServerShowLive do
 
     {:noreply, socket}
   end
-
-  # def handle_event("add_server_user", _params, socket) do
-  #   server_name = socket.assigns.server.name
-
-  #   socket =
-  #     socket
-  #     |> assign(server: socket.assigns.server)
-  #     |> push_navigate(to: "/servers/#{server_name}/users/create")
-
-  #   {:noreply, socket}
-  # end
-
-  # def handle_event("user_show", %{"username" => username}, socket) do
-  #   server_name = socket.assigns.server.name
-  #   socket = socket
-  #     |> push_navigate(to: ~p"/servers/#{server_name}/users/#{username}/info")
-
-  #   {:noreply, socket}
-  # end
 
   def redirect(socket, params) do
     server_name = Map.get(params, "name")
