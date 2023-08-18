@@ -1,0 +1,57 @@
+<div class="pt-20 max-w-2xl mx-auto">
+  <div class="relative bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    <div class="p-4 md:p-5">
+      <div class="w-10 h-10 text-gray-500 font-bold rounded-full grid place-content-center bg-gray-200 mb-3">
+        <%= @user.username |> String.first() %>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800">
+        <%= @user.username %>
+      </h3>
+      <p class="mt-1 text-gray-800">
+        <%= @user.email %>
+      </p>
+      <p class="mt-5  text-gray-700">
+        Server:
+        <.link navigate={"/servers/#{@user.server.name}/info"} class="text-blue-600 underline">
+          <%= @user.server.name %>
+        </.link>
+      </p>
+    </div>
+  </div>
+
+  <div class="relative mt-2 p-2 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    <button
+      id="delete-modal-btn"
+      phx-click={JS.show(to: "#delete-modal")}
+      class="block ml-auto text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:red-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      type="button"
+    >
+      Delete User
+    </button>
+  </div>
+  <section class="posts mt-10 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    <h3 class="text-lg font-bold text-gray-800 p-4 md:p-5">
+      Posts
+    </h3>
+    <div class="py-3">
+      <div class="overflow-scroll max-h-[50vh]  flex flex-col gap-4 px-3">
+        <%= if length(@user_posts) == 0 do %>
+          <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+            <p class="text-gray-800">
+              No posts yet.
+            </p>
+          </div>
+        <% else %>
+          <%= for post <- @user_posts do %>
+            <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+              <div>
+                <h1><%= post.title %></h1>
+                <p><%= post.body %></p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>

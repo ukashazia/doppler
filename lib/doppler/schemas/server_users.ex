@@ -8,7 +8,7 @@ defmodule Doppler.Schemas.ServerUsers do
     field :email, :string
 
     belongs_to :server, Server
-    has_many :posts, ServerPosts, on_delete: :delete_all
+    has_many :post, ServerPosts, on_delete: :delete_all
   end
 
   def changeset(%ServerUsers{} = server_users, params \\ %{}) do

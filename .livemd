@@ -1,0 +1,60 @@
+<!-- livebook:{"app_settings":{"auto_shutdown_ms":3600000,"slug":"Doppler"}} -->
+
+# Doppler
+
+```elixir
+import Ecto.Query
+alias Doppler.{Repo}
+```
+
+## Query
+
+<!-- livebook:{"continue_on_error":true} -->
+
+```elixir
+query =
+  from(
+    u in Doppler.Schemas.ServerUsers,
+    join: s in assoc(u, :server),
+    where: u.username == "doppler" and s.name == "Doppler"
+  )
+
+Repo.all(query)
+```
+
+here,
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+join: s in assoc(u, :server),
+```
+
+`s` is an alias to the associated `server`.
+
+```elixir
+post =
+  Doppler.Posts.Posts.add_post("one", "one", %{
+    title: "seventh post",
+    body: "one's first post here."
+  })
+```
+
+```elixir
+{_, data} = post
+data.data
+```
+
+```elixir
+import Ecto.Query
+
+query =
+  from(
+    p in Doppler.Schemas.ServerPosts,
+    join: u in assoc(p, :server_users),
+    join: s in assoc(p, :server),
+    where: u.username == "one" and s.name == "one"
+  )
+
+Repo.all(query)
+```

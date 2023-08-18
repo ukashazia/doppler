@@ -49,9 +49,6 @@ defmodule DopplerWeb.ConnCase do
   #   %{conn: log_in_user(conn, user), user: user}
   # end
 
-
-
-
   # def log_in_user(conn, user) do
   #   token = Doppler.Users.generate_user_session_token(user)
 
