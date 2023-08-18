@@ -133,7 +133,9 @@ defmodule ServerGenerator do
       "Discussing photography techniques and tips."
     ]
   end
-end
+
+  all_tags = Doppler.Repo.all(Doppler.Schemas.ServerTags)
+
 
 servers = ServerGenerator.generate_servers()
 
@@ -157,9 +159,5 @@ Enum.each(tags, fn tag ->
   ServerTags.changeset(%ServerTags{}, tag)
   |> Doppler.Repo.insert()
 end)
-
+end
 # all_tags = Doppler.Repo.all(Doppler.Schemas.ServerTags)
-# aio_server = %{name: "AIO", description: "All the fun in one!"}
-# Ecto.Changeset.change(%)
-# Doppler.Schemas.Server.changeset(%Doppler.Schemas.Server{}, aio_server)
-# |> Doppler.Repo.insert()
