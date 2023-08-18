@@ -8,10 +8,12 @@ defmodule DopplerWeb.Live.ServerPosts.ServerPostsLive do
 
   def update(assigns, socket) do
     IO.inspect(assigns)
+    server_name = assigns.server.name
+    server_posts = Doppler.Servers.Server.list_server_posts(server_name)
 
     socket =
       socket
-      |> assign(assigns: assigns)
+      |> assign(assigns: assigns, server_posts: server_posts, page_title: "Posts")
 
     {:ok, socket}
   end

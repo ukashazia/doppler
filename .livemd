@@ -40,9 +40,10 @@ post =
   })
 ```
 
+<!-- livebook:{"continue_on_error":true} -->
+
 ```elixir
-{_, data} = post
-data.data
+
 ```
 
 ```elixir
@@ -56,5 +57,12 @@ query =
     where: u.username == "one" and s.name == "one"
   )
 
+Repo.all(query)
+```
+
+```elixir
+# body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+# Doppler.Posts.Posts.add_post("one", "one", %{title: "A long post", body: body})
+query = from(s in Doppler.Schemas.Server, limit: 2)
 Repo.all(query)
 ```

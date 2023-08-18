@@ -13,6 +13,7 @@ defmodule Doppler.Schemas.Server do
 
     has_many :server_users, ServerUsers, on_delete: :delete_all
     has_many :post, ServerPosts, on_delete: :delete_all
+    timestamps()
   end
 
   def changeset(server = %Server{}, params \\ %{}) do

@@ -1,5 +1,12 @@
 defmodule Doppler.Servers.Server do
-  alias Doppler.{Schemas.Server, Schemas.ServerUsers, Schemas.ServerTags, Repo}
+  alias Doppler.{
+    Schemas.Server,
+    Schemas.ServerUsers,
+    Schemas.ServerTags,
+    Schemas.ServerPosts,
+    Repo
+  }
+
   import Ecto.Query
 
   def add_server(server_params) do
@@ -19,7 +26,7 @@ defmodule Doppler.Servers.Server do
   end
 
   def index(offset, server_name, filters) do
-    query = from(s in Server)
+    query = from(s in Server, order_by: [desc: s.inserted_at])
 
     query =
       query
@@ -140,6 +147,23 @@ defmodule Doppler.Servers.Server do
 
       {:error, changeset} ->
         {:error, changeset}
+    end
+  end
+
+  def list_server_posts(server_name) do
+    query =
+      from(
+        p in ServerPosts,
+        join: s in assoc(p, :server),
+        where: s.name == ^server_name,
+        select: p,
+        order_by: [desc: p.inserted_at],
+        preload: [:server_users]
+      )
+
+    case Repo.all(query) do
+      [] -> []
+      posts -> posts
     end
   end
 end
