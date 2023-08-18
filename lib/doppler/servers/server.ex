@@ -106,15 +106,16 @@ defmodule Doppler.Servers.Server do
   end
 
   def server_user_count(server_name) do
-    # query = from(s in Server,
-    #  preload: [:server_users],
-    #  select: count(s.server_users),
-    #  )
-    server = Repo.get_by(Server, %{name: server_name}) |> Repo.preload(:server_users)
-    length(server.server_users)
-    # pattern m atching cuz server_ocunt returns number in a list
-    # [count] = Repo.all(query)
-    # count
+    query =
+      from(
+        s in Server,
+        join: u in assoc(s, :server_users),
+        where: s.name == ^server_name,
+        select: count(u)
+      )
+
+    [count] = Repo.all(query)
+    count
   end
 
   def server_user_count(server_name, user_name) do

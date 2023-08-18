@@ -1,5 +1,5 @@
 defmodule Doppler.Posts.Posts do
-  alias Doppler.{Schemas.ServerPosts, Repo, Schemas.ServerUsers}
+  alias Doppler.{Schemas.ServerPosts, Repo}
   import Ecto.Query
 
   def get_posts(user_name, server_name) do
