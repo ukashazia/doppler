@@ -32,6 +32,9 @@
   <section class="posts mt-10 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
     <h3 class="text-lg font-bold text-gray-800 p-4 md:p-5">
       Posts
+      <span class="text-gray-400 mx-1">
+        <%= if length(@user_posts) !== 0, do: length(@user_posts) %>
+      </span>
     </h3>
     <div class="py-3">
       <div class="overflow-scroll max-h-[50vh]  flex flex-col gap-4 px-3">
@@ -45,8 +48,8 @@
           <%= for post <- @user_posts do %>
             <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
               <div>
-                <h1><%= post.title %></h1>
-                <p><%= post.body %></p>
+                <h1 class="font-bold text-md text-gray-700"><%= post.title %></h1>
+                <p class="text-gray-600"><%= post.body %></p>
               </div>
             </div>
           <% end %>

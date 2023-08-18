@@ -1,7 +1,7 @@
 defmodule DopplerWeb.Live.ServerUsers.ServerUserShowLive do
   use DopplerWeb, :live_view
 
-  def mount(params, session, socket) do
+  def mount(params, _session, socket) do
     username = params["username"]
     user = Doppler.Users.User.get_user(username, params["name"])
     user_posts = Doppler.Posts.Posts.get_posts(username, params["name"])
@@ -18,7 +18,7 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUserShowLive do
     {:ok, socket}
   end
 
-  def handle_event(event, unsigned_params, socket) do
+  def handle_event(_event, _unsigned_params, socket) do
     {:noreply, socket}
   end
 end

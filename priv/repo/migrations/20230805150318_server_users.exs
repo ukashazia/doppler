@@ -6,6 +6,7 @@ defmodule Doppler.Repo.Migrations.ServerUsers do
       add :username, :string
       add :email, :string
       add :server_id, references(:servers)
+      timestamps()
     end
 
     create unique_index(:server_users, [:username])

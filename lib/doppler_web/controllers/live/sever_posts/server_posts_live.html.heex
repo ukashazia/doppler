@@ -1,21 +1,36 @@
 <div>
-  Posts go here for <%= @assigns.server.name %>
   <div class="mt-20 max-w-2xl mx-auto">
+    <div class="relative mb-2 p-2 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    </div>
     <div class="relative bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
       <div class="">
-        <div class="w-6 h-6 rounded-full bg-gray-300 m-4 md:m-5"></div>
-        <div class="p-4 md:p-5">
-          <h3 class="text-lg font-bold text-gray-800">
-            <%= @assigns.server.name %>
-          </h3>
-          <p class="mt-1 text-gray-800">
-            <%= @assigns.server.description %>
-          </p>
-          <p class="mt-5 text-xs text-gray-300"></p>
+        <div class="py-3">
+          <div class="overflow-scroll max-h-[50vh]  flex flex-col gap-4 px-3">
+            <%= if length(@server_posts) == 0 do %>
+              <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+                <p class="text-gray-800">
+                  No posts yet.
+                </p>
+              </div>
+            <% else %>
+              <%= for post <- @server_posts do %>
+                <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+                  <div class="flex gap-3 mb-3">
+                    <div class="w-6 h-6 rounded-full bg-gray-300 "></div>
+                    <p class="text-gray-600 text-sm cursor-pointer hover:text-black ">
+                      <%= post.server_users.username %>
+                    </p>
+                  </div>
+                  <div>
+                    <h1 class="font-bold text-md text-gray-700"><%= post.title %></h1>
+                    <p class="text-gray-600"><%= post.body %></p>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="relative mt-2 p-2 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
     </div>
   </div>
 </div>
