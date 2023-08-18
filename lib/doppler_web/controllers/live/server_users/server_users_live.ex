@@ -39,7 +39,17 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUsersLive do
 
     socket =
       socket
-      |> push_navigate(to: "/servers/#{server_name}")
+      |> push_navigate(to: "/servers/#{server_name}/users/create")
+
+    {:noreply, socket}
+  end
+
+  def handle_event("user_show", %{"username" => username}, socket) do
+    server_name = socket.assigns.server.name
+
+    socket =
+      socket
+      |> push_navigate(to: "/servers/#{server_name}/users/#{username}/info")
 
     {:noreply, socket}
   end

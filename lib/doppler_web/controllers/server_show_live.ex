@@ -13,7 +13,8 @@ defmodule DopplerWeb.ServerShowLive do
           socket
           |> assign(
             server: server,
-            params: params
+            params: params,
+            page_title: "#{server.name}"
           )
 
         {:ok, socket}
@@ -45,16 +46,24 @@ defmodule DopplerWeb.ServerShowLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_server_user", _params, socket) do
-    server_name = socket.assigns.server.name
+  # def handle_event("add_server_user", _params, socket) do
+  #   server_name = socket.assigns.server.name
 
-    socket =
-      socket
-      |> assign(server: socket.assigns.server)
-      |> push_navigate(to: "/servers/#{server_name}/users/create")
+  #   socket =
+  #     socket
+  #     |> assign(server: socket.assigns.server)
+  #     |> push_navigate(to: "/servers/#{server_name}/users/create")
 
-    {:noreply, socket}
-  end
+  #   {:noreply, socket}
+  # end
+
+  # def handle_event("user_show", %{"username" => username}, socket) do
+  #   server_name = socket.assigns.server.name
+  #   socket = socket
+  #     |> push_navigate(to: ~p"/servers/#{server_name}/users/#{username}/info")
+
+  #   {:noreply, socket}
+  # end
 
   def redirect(socket, params) do
     server_name = Map.get(params, "name")

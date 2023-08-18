@@ -5,13 +5,17 @@ defmodule DopplerWeb.Live.ServerPosts.ServerPostsLive do
   def mount(socket) do
     {:ok, socket}
   end
+
   def update(assigns, socket) do
     IO.inspect(assigns)
-    socket = socket
+
+    socket =
+      socket
       |> assign(assigns: assigns)
 
     {:ok, socket}
   end
+
   def handle_params(_params, _uri, socket) do
     {:no_reply, socket}
   end

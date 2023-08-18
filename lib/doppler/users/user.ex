@@ -27,4 +27,16 @@ defmodule Doppler.Users.User do
         {:error, changeset}
     end
   end
+
+  def get_user(user_name, server_name) do
+    query =
+      from(
+        u in Doppler.Schemas.ServerUsers,
+        join: s in assoc(u, :server),
+        where: u.username == ^user_name and s.name == ^server_name
+      )
+
+    Repo.one(query)
+    |> Repo.preload(:server)
+  end
 end
