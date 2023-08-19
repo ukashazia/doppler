@@ -18,7 +18,8 @@ defmodule Doppler.Posts.Posts do
   def add_post(server_name, user_name, post_params) do
     {:ok, server} = Doppler.Servers.Server.get_server(server_name)
     server = Repo.preload(server, :post)
-    user = Doppler.Users.User.get_user(user_name, server_name) |> Repo.preload(:post)
+    {:ok, user} = Doppler.Users.User.get_user(user_name, server_name)
+    user = Repo.preload(user, :post)
     IO.inspect(server)
     IO.inspect(user)
 

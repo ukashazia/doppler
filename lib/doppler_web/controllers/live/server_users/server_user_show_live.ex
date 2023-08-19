@@ -3,7 +3,7 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUserShowLive do
 
   def mount(params, _session, socket) do
     username = params["username"]
-    user = Doppler.Users.User.get_user(username, params["name"])
+    {:ok, user} = Doppler.Users.User.get_user(username, params["name"])
     user_posts = Doppler.Posts.Posts.get_posts(username, params["name"])
 
     socket =

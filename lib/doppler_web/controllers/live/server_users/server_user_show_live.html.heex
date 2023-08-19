@@ -32,7 +32,7 @@
   <section class="posts mt-10 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
     <h3 class="text-lg font-bold text-gray-800 p-4 md:p-5">
       Posts
-      <span class="text-gray-400 mx-1">
+      <span class="inline-block rounded-full bg-blue-500 text-sm text-white text-center w-5 h-5 mx-1">
         <%= if length(@user_posts) !== 0, do: length(@user_posts) %>
       </span>
     </h3>
@@ -46,10 +46,10 @@
           </div>
         <% else %>
           <%= for post <- @user_posts do %>
-            <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+            <div phx-click={JS.set_attribute({"aria-expanded", "true"}, to: "#post-#{post.id}00") |> JS.add_class("after:hidden")} class="relative p-4 border rounded-xl bg-gray-50 hover:border-blue-300 after:absolute after:hover:cursor-pointer after:w-full after:bg-gradient-to-t from-blue-400 to-blue-50/40 after:bottom-0 after:left-0 after:h-20 after:rounded-b-xl">
               <div>
                 <h1 class="font-bold text-md text-gray-700"><%= post.title %></h1>
-                <p class="text-gray-600"><%= post.body %></p>
+                <p id={"post-#{post.id}00"} class="relative text-gray-600 aria-expanded:overflow-auto aria-expanded:max-h-none max-h-[300px] overflow-hidden"><%= post.body %></p>
               </div>
             </div>
           <% end %>

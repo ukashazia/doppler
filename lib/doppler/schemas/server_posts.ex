@@ -20,6 +20,6 @@ defmodule Doppler.Schemas.ServerPosts do
     # |> cast_assoc(:server_users)
     |> validate_required([:title, :body])
     |> validate_length(:title, greater_than: 5, less_than: 50)
-    |> validate_length(:body, greater_than: 5, less_than: 500)
+    |> validate_length(:body, greater_than: 5, less_than: 4000)
   end
 end

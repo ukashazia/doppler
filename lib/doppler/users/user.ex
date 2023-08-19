@@ -36,7 +36,12 @@ defmodule Doppler.Users.User do
         where: u.username == ^user_name and s.name == ^server_name
       )
 
-    Repo.one(query)
-    |> Repo.preload(:server)
+    case Repo.one(query) |> Repo.preload(:server) do
+      nil ->
+        {:error, "User not found"}
+
+      user ->
+        {:ok, user}
+    end
   end
 end
