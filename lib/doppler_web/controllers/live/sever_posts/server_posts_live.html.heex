@@ -1,11 +1,11 @@
 <div>
-  <div class="mt-20 max-w-2xl mx-auto">
+  <div class="mt-20 max-w-4xl mx-auto px-10">
     <div class="relative mb-2 p-2 bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
     </div>
-    <div class="relative bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+    <div class="relative bg-white border shadow-sm rounded-[24px] dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
       <div class="">
-        <div class="py-3">
-          <div class="overflow-scroll max-h-[50vh]  flex flex-col gap-4 px-3">
+        <div class="p-3">
+          <div class="overflow-scroll max-h-[70dvh] bg-transparent rounded-xl flex flex-col gap-4">
             <%= if length(@server_posts) == 0 do %>
               <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
                 <p class="text-gray-800">
@@ -13,17 +13,22 @@
                 </p>
               </div>
             <% else %>
-              <%= for post <- @server_posts do %>
-                <div class="p-4 border shadow-sm rounded-xl bg-gray-50">
+            <%= for post <- @server_posts do %>
+                <div phx-click={JS.set_attribute({"aria-expanded", "true"}, to: "#post-#{post.id}00") |> JS.add_class("after:hidden")} class="relative p-4 border rounded-xl bg-gray-50 hover:border-blue-300 after:absolute after:content-['expand'] after:text-white after:text-2xl after:grid after:place-content-center after:hover:cursor-pointer after:w-full after:bg-gradient-to-t from-blue-500 to-blue-50/70 after:bottom-0 after:left-0 after:h-20 after:rounded-b-xl">
                   <div class="flex gap-3 mb-3">
-                    <div class="w-6 h-6 rounded-full bg-gray-300 "></div>
-                    <p class="text-gray-600 text-sm cursor-pointer hover:text-black ">
+                    <div class="w-6 h-6 rounded-full bg-gray-300 text-gray-700 grid place-content-center">
+                      <%= String.first(post.server_users.username) %>
+                    </div>
+                    <.link
+                      navigate={"/servers/#{@assigns.server.name}/users/#{post.server_users.username}/info"}
+                      class="text-gray-600 text-sm cursor-pointer hover:text-black "
+                    >
                       <%= post.server_users.username %>
-                    </p>
+                    </.link>
                   </div>
                   <div>
                     <h1 class="font-bold text-md text-gray-700"><%= post.title %></h1>
-                    <p class="text-gray-600"><%= post.body %></p>
+                    <p id={"post-#{post.id}00"} class="relative text-gray-600 aria-expanded:overflow-auto aria-expanded:max-h-none max-h-[300px] overflow-hidden"><%= post.body %></p>
                   </div>
                 </div>
               <% end %>
