@@ -2,6 +2,7 @@ defmodule DopplerWeb.Live.ServerPosts.ServerPostsLive do
   use Phoenix.LiveComponent
   use Phoenix.HTML
   alias Phoenix.LiveView.JS
+
   def mount(socket) do
     {:ok, socket}
   end
@@ -21,5 +22,4 @@ defmodule DopplerWeb.Live.ServerPosts.ServerPostsLive do
   def handle_params(_params, _uri, socket) do
     {:no_reply, socket}
   end
-
 end

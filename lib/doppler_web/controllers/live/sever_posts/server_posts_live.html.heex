@@ -13,8 +13,21 @@
                 </p>
               </div>
             <% else %>
-            <%= for post <- @server_posts do %>
-                <div phx-click={JS.set_attribute({"aria-expanded", "true"}, to: "#post-#{post.id}00") |> JS.add_class("after:hidden")} class="relative p-4 border rounded-xl bg-gray-50 hover:border-blue-300 after:absolute after:content-['expand'] after:text-white after:text-2xl after:grid after:place-content-center after:hover:cursor-pointer after:w-full after:bg-gradient-to-t from-blue-500 to-blue-50/70 after:bottom-0 after:left-0 after:h-20 after:rounded-b-xl">
+              <%= for post <- @server_posts do %>
+                <div
+                  class="relative p-4 border rounded-xl bg-gray-50 hover:border-blue-300 af"
+                  phx-hook="removeExpander"
+                  id={"post-#{post.id}"}
+                >
+                  <div
+                    phx-click={
+                      JS.set_attribute({"aria-expanded", "true"}, to: "#post-#{post.id}00")
+                      |> JS.set_attribute({"aria-hidden", "true"})
+                    }
+                    class="post-expand-btn z-10 backdrop-blur-[0.8px] absolute aria-hidden:hidden grid place-content-center text-white cursor-pointer w-full bg-gradient-to-t from-blue-400 to-blue-50/40 bottom-0 left-0 h-20 rounded-b-xl"
+                  >
+                    see more
+                  </div>
                   <div class="flex gap-3 mb-3">
                     <div class="w-6 h-6 rounded-full bg-gray-300 text-gray-700 grid place-content-center">
                       <%= String.first(post.server_users.username) %>
@@ -28,7 +41,12 @@
                   </div>
                   <div>
                     <h1 class="font-bold text-md text-gray-700"><%= post.title %></h1>
-                    <p id={"post-#{post.id}00"} class="relative text-gray-600 aria-expanded:overflow-auto aria-expanded:max-h-none max-h-[300px] overflow-hidden"><%= post.body %></p>
+                    <p
+                      id={"post-#{post.id}00"}
+                      class="relative text-gray-600 aria-expanded:overflow-auto aria-expanded:max-h-none max-h-[300px] overflow-hidden"
+                    >
+                      <%= post.body %>
+                    </p>
                   </div>
                 </div>
               <% end %>
