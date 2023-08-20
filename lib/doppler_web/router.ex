@@ -31,6 +31,8 @@ defmodule DopplerWeb.Router do
     live "/servers/:name/users", ServerShowLive, :server_users
     live "/servers/:name/users/create", Live.ServerUsers.UserFormLive
     live "/servers/:name/users/:username/info", Live.ServerUsers.ServerUserShowLive, :user_info
+
+    # live "/servers/:name/users/:username/post", Live.ServerUsers.ServerUserShowLive, :create_post
   end
 
   # Other scopes may use custom stacks.

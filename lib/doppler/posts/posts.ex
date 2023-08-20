@@ -8,7 +8,8 @@ defmodule Doppler.Posts.Posts do
         p in Doppler.Schemas.ServerPosts,
         join: u in assoc(p, :server_users),
         join: s in assoc(p, :server),
-        where: u.username == ^user_name and s.name == ^server_name
+        where: u.username == ^user_name and s.name == ^server_name,
+        order_by: [desc: p.inserted_at]
       )
 
     Repo.all(query)
@@ -20,14 +21,15 @@ defmodule Doppler.Posts.Posts do
     server = Repo.preload(server, :post)
     {:ok, user} = Doppler.Users.User.get_user(user_name, server_name)
     user = Repo.preload(user, :post)
-    IO.inspect(server)
-    IO.inspect(user)
+    # IO.inspect(server)
+    # IO.inspect(user)
 
     post_changeset =
       ServerPosts.changeset(%ServerPosts{}, post_params)
       |> Ecto.Changeset.put_assoc(:server, server)
       |> Ecto.Changeset.put_assoc(:server_users, user)
-      |> IO.inspect()
+
+    # |> IO.inspect()
 
     case Repo.insert(post_changeset) do
       {:ok, post} ->
