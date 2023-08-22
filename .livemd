@@ -1,4 +1,4 @@
-<!-- livebook:{"app_settings":{"auto_shutdown_ms":3600000,"slug":"Doppler"}} -->
+<!-- livebook:{"app_settings":{"auto_shutdown_ms":3600000,"show_source":true,"slug":"Doppler"}} -->
 
 # Doppler
 
@@ -7,7 +7,7 @@ import Ecto.Query
 alias Doppler.{Repo}
 ```
 
-## Query
+## Testing
 
 <!-- livebook:{"continue_on_error":true} -->
 
@@ -72,4 +72,32 @@ Doppler.Servers.Server.list_server_posts("one")
 Doppler.Users.User.get_user("user", "one")
 ```
 
-## Section
+## Add random posts to random users in Doppler server
+
+Add a long post to server with `server_name` and `user_name`
+
+```elixir
+server_name = "doppler"
+
+[user_name] =
+  Repo.all(Doppler.Schemas.ServerUsers)
+  |> Enum.map(fn user -> user.username end)
+  |> Enum.take_random(1)
+
+body =
+  Faker.Lorem.paragraphs(1..10)
+  |> Enum.join(" ")
+
+title = Faker.Lorem.Shakespeare.En.romeo_and_juliet()
+
+Doppler.Posts.Posts.add_post(server_name, user_name, %{title: title, body: body})
+```
+
+## Creates random users in Doppler server
+
+```elixir
+username = Faker.Internet.user_name()
+email = Faker.Internet.free_email()
+user_params = %{username: username, email: email}
+Doppler.Servers.Server.add_user("doppler", user_params)
+```

@@ -33,9 +33,11 @@
     <div class="flex justify-between">
       <h3 class="text-lg font-bold text-gray-800 p-4 md:p-5">
         Posts
-        <span class="inline-grid place-content-center rounded-full bg-blue-500 text-sm text-white  w-6 h-6 mx-1">
-          <%= if length(@user_posts) !== 0, do: length(@user_posts) %>
-        </span>
+        <%= if length(@user_posts) !== 0 do %>
+          <span class="inline-grid place-content-center rounded-full bg-blue-500 text-sm text-white  w-6 h-6 mx-1">
+            length(@user_posts)
+          </span>
+        <% end %>
       </h3>
       <div
         phx-click={JS.show(to: "#create-post-modal")}
