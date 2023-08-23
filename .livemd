@@ -102,17 +102,13 @@ user_params = %{username: username, email: email}
 Doppler.Servers.Server.add_user("doppler", user_params)
 ```
 
-```elixir
-defmodule Recursion do
-  def recr(1), do: 1
+* explored the web application
 
-  def recr(inc) do
-    IO.puts(inc)
-    Recursion.recr(inc + 1)
-  end
-end
-```
+* oversee the general work flow and development structure
 
-```elixir
-Recursion.recr(0)
-```
+* how do i get acces to source code ?
+
+<!-- livebook:{"break_markdown":true} -->
+
+* separate test repository in github action
+*
