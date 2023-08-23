@@ -101,3 +101,18 @@ email = Faker.Internet.free_email()
 user_params = %{username: username, email: email}
 Doppler.Servers.Server.add_user("doppler", user_params)
 ```
+
+```elixir
+defmodule Recursion do
+  def recr(1), do: 1
+
+  def recr(inc) do
+    IO.puts(inc)
+    Recursion.recr(inc + 1)
+  end
+end
+```
+
+```elixir
+Recursion.recr(0)
+```

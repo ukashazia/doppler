@@ -1,3 +1,5 @@
+alias Doppler.Repo
+import Ecto.Query
 defmodule ServerGenerator do
   def generate_servers do
     names = Enum.shuffle(server_names())
@@ -243,3 +245,40 @@ Enum.each(tags, fn tag ->
   ServerTags.changeset(%ServerTags{}, tag)
   |> Doppler.Repo.insert()
 end)
+
+defmodule Populate do
+  def add_doppler(), do: Doppler.Servers.Server.add_server(%{name: "doppler"})
+  def add_users(100), do: nil
+
+  def add_users(counter) do
+    username = Faker.Internet.user_name()
+    email = Faker.Internet.free_email()
+    user_params = %{username: username, email: email}
+    Doppler.Servers.Server.add_user("doppler", user_params)
+    add_users(counter + 1)
+  end
+
+  def add_posts(23), do: nil
+
+  def add_posts(counter) do
+    server_name = "doppler"
+
+    [user_name] =
+      Repo.all(Doppler.Schemas.ServerUsers)
+      |> Enum.map(fn user -> user.username end)
+      |> Enum.take_random(1)
+
+    body =
+      Faker.Lorem.paragraphs(1..10)
+      |> Enum.join(" ")
+
+    title = Faker.Lorem.Shakespeare.En.romeo_and_juliet()
+
+    Doppler.Posts.Posts.add_post(server_name, user_name, %{title: title, body: body})
+    add_posts(counter + 1)
+  end
+end
+
+Populate.add_doppler()
+Populate.add_users(1)
+Populate.add_posts(1)
