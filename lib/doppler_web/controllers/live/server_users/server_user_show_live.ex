@@ -47,46 +47,4 @@ defmodule DopplerWeb.Live.ServerUsers.ServerUserShowLive do
         {:noreply, socket}
     end
   end
-
-  def handle_event("change_post", %{"server_posts" => params}, socket) do
-    post_changeset = Doppler.Schemas.ServerPosts.changeset(%Doppler.Schemas.ServerPosts{}, params)
-
-    IO.inspect(post_changeset)
-
-    socket =
-      socket
-      |> assign(post_changeset: post_changeset)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("submit_post", %{"server_posts" => params}, socket) do
-    post_changeset = Doppler.Schemas.ServerPosts.changeset(%Doppler.Schemas.ServerPosts{}, params)
-
-    server_name = socket.assigns.user.server.name
-    username = socket.assigns.user.username
-
-    if post_changeset.valid? do
-      case Doppler.Posts.Posts.add_post(server_name, username, params) do
-        {:ok, _post} ->
-          socket =
-            socket
-            |> put_flash(:info, "Post created")
-
-          {:noreply, socket}
-
-        {:error, post_changeset} ->
-          socket =
-            socket
-            |> assign(post_changeset: post_changeset)
-            |> put_flash(:error, "Something went wrong")
-
-          {:noreply, socket}
-      end
-    else
-      socket = assign(socket, post_changeset: post_changeset)
-      IO.inspect(post_changeset)
-      {:noreply, socket}
-    end
-  end
 end
