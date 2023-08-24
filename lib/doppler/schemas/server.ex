@@ -20,11 +20,9 @@ defmodule Doppler.Schemas.Server do
   def changeset(server = %Server{}, params \\ %{}) do
     server
     |> cast(params, [:name, :description])
-    # |> cast_assoc(:server_tags)
-    # |> cast_assoc(:server_users)
     |> validate_required([:name])
     |> unique_constraint(:name)
-    |> validate_format(:name, ~r/^[a-zA-Z0-9_]+$/)
+    |> validate_format(:name, ~r/^[a-zA-Z0-9_]*[a-zA-Z][a-zA-Z0-9_]*$/)
     |> validate_length(:name, less_than: 20, greater_than: 2)
     |> validate_length(:description, less_than: 100, greater_than: 2)
   end

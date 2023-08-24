@@ -74,7 +74,7 @@ defmodule DopplerWeb.ServerShowLive do
         socket =
           socket
           |> put_flash(:info, "Updated!")
-          |> push_navigate(to: "/servers/#{server_name}/info")
+          |> push_navigate(to: "/servers/#{params["name"]}/info")
 
         {:noreply, socket}
 
