@@ -77,6 +77,13 @@ defmodule DopplerWeb.ServerShowLive do
           |> push_navigate(to: "/servers/#{server_name}/info")
 
         {:noreply, socket}
+
+      {:error, changeset} ->
+        socket =
+          socket
+          |> assign(changeset: changeset)
+
+        {:noreply, socket}
     end
   end
 
@@ -94,9 +101,10 @@ defmodule DopplerWeb.ServerShowLive do
     # server_params = Map.put(server_params, "server_tags", tag)
     IO.inspect(tag)
     IO.inspect(server_params)
+    {:ok, server} = Server.get_server(socket.assigns.server.name)
 
     changeset =
-      ServerSchema.changeset(%ServerSchema{}, server_params)
+      ServerSchema.changeset(server, server_params)
       |> Ecto.Changeset.put_assoc(:server_tags, tag)
 
     IO.inspect(changeset)

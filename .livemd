@@ -125,11 +125,7 @@ Doppler.Servers.Server.add_user("doppler", user_params)
 # |> Doppler.Schemas.Server.changeset(%{name: "Doppler"})
 # |> Ecto.Changeset.put_assoc(:server_tags, tags)
 # |> Doppler.Repo.update()
-params = %{
-  "server_tags" => ["other"],
-  "name" => "doppler",
-  "description" => "Doppler's official server"
-}
 
-Doppler.Servers.Server.update_server("doppler", params)
+# params = %{"server_tags" => ["other"], "name" => "doppler", "description" => "Doppler's official server"}
+# Doppler.Servers.Server.update_server("doppler", params)
 ```
