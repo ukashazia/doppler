@@ -1,4 +1,4 @@
-<!-- livebook:{"app_settings":{"auto_shutdown_ms":3600000,"show_source":true,"slug":"Doppler"}} -->
+<!-- livebook:{"app_settings":{"show_source":true,"slug":"Doppler"}} -->
 
 # Doppler
 
@@ -111,4 +111,21 @@ Doppler.Servers.Server.add_user("doppler", user_params)
 <!-- livebook:{"break_markdown":true} -->
 
 * separate test repository in github action
-*
+  *
+
+## Update server info
+
+```elixir
+tags_query = from(t in Doppler.Schemas.ServerTags, where: t.name in ["other", "nsfw"])
+
+tags = Doppler.Repo.all(tags_query)
+IO.inspect(tags)
+{:ok, server} = Doppler.Servers.Server.get_server("doppler")
+
+server =
+  server
+  |> Doppler.Repo.preload(:server_tags)
+  |> Doppler.Schemas.Server.changeset()
+  |> Ecto.Changeset.put_assoc(:server_tags, tags)
+  |> Doppler.Repo.update()
+```

@@ -9,7 +9,8 @@ defmodule Doppler.Schemas.Server do
 
     many_to_many :server_tags, ServerTags,
       join_through: "servers_many_to_many_tags",
-      on_delete: :delete_all
+      on_delete: :delete_all,
+      on_replace: :delete
 
     has_many :server_users, ServerUsers, on_delete: :delete_all
     has_many :post, ServerPosts, on_delete: :delete_all
