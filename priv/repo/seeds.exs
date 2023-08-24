@@ -1,5 +1,6 @@
 alias Doppler.Repo
 import Ecto.Query
+
 defmodule ServerGenerator do
   def generate_servers do
     names = Enum.shuffle(server_names())

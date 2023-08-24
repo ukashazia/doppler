@@ -4,7 +4,8 @@ defmodule Doppler.Servers.Server do
     Schemas.ServerUsers,
     Schemas.ServerTags,
     Schemas.ServerPosts,
-    Repo
+    Repo,
+    Servers.ServerTags
   }
 
   import Ecto.Query
@@ -23,6 +24,17 @@ defmodule Doppler.Servers.Server do
     |> Ecto.Changeset.put_assoc(:server_tags, tag)
     |> IO.inspect()
     |> Repo.insert()
+  end
+
+  def update_server(server_name, params) do
+    {:ok, server} = get_server(server_name)
+    server = server |> Repo.preload(:server_tags)
+    server_tags = ServerTags.index(params["server_tags"])
+
+    server
+    |> Server.changeset(params)
+    |> Ecto.Changeset.put_assoc(:server_tags, server_tags)
+    |> Repo.update()
   end
 
   def index(offset, server_name, filters) do

@@ -116,16 +116,20 @@ Doppler.Servers.Server.add_user("doppler", user_params)
 ## Update server info
 
 ```elixir
-tags_query = from(t in Doppler.Schemas.ServerTags, where: t.name in ["other", "nsfw"])
+# tags_query = from(t in Doppler.Schemas.ServerTags, where: t.name in ["other", "nsfw"])
 
-tags = Doppler.Repo.all(tags_query)
-IO.inspect(tags)
-{:ok, server} = Doppler.Servers.Server.get_server("doppler")
+# tags = Doppler.Repo.all(tags_query)
+# IO.inspect(tags)
+# {:ok, server} = Doppler.Servers.Server.get_server("Doppler")
+# server = server |>  Doppler.Repo.preload(:server_tags)
+# |> Doppler.Schemas.Server.changeset(%{name: "Doppler"})
+# |> Ecto.Changeset.put_assoc(:server_tags, tags)
+# |> Doppler.Repo.update()
+params = %{
+  "server_tags" => ["other"],
+  "name" => "doppler",
+  "description" => "Doppler's official server"
+}
 
-server =
-  server
-  |> Doppler.Repo.preload(:server_tags)
-  |> Doppler.Schemas.Server.changeset()
-  |> Ecto.Changeset.put_assoc(:server_tags, tags)
-  |> Doppler.Repo.update()
+Doppler.Servers.Server.update_server("doppler", params)
 ```
